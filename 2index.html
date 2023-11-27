@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>สแกนบาร์โค้ดโดยละเอียด</title>
+</head>
+<body>
+  <img src="barcode.png" onmouseover="showDetails()" onmouseout="hideDetails()">
+
+  <script>
+    function showDetails() {
+      var barcodeData = document.querySelector("img").src;
+      var barcodeDetails = "Barcode Data: " + barcodeData;
+      document.getElementById("details").innerHTML = barcodeDetails;
+    }
+
+    function hideDetails() {
+      document.getElementById("details").innerHTML = "";
+    }
+  </script>
+
+  <div id="details"></div>
+</body>
+</html>
+
+<script>
+  function showDetails() {
+    var barcodeData = document.querySelector("img").src;
+    var barcodeDetails = "Barcode Data: " + barcodeData;
+
+    // ประมวลผลข้อมูลบาร์โค้ด
+    var barcodeType = barcodeData.substring(0, 2);
+    var barcodeDataValue = barcodeData.substring(2);
+
+    // แสดงข้อมูลที่เกี่ยวข้อง
+    barcodeDetails += " (Type: " + barcodeType + ", Value: " + barcodeDataValue + ")";
+    document.getElementById("details").innerHTML = barcodeDetails;
+  }
+
+  function hideDetails() {
+    document.getElementById("details").innerHTML = "";
+  }
+</script>
