@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE Barcode Scanner</title>
+</head>
+<body>
+    <h1>LINE Barcode Scanner</h1>
+    
+    <!-- Display barcode result -->
+    <div id="result"></div>
+
+    <!-- Add LINE LIFF and Messaging API SDKs -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        // Initialize LIFF
+        liff.init({
+            liffId: '2001885118-NGPwyjqk'
+        })
+        .then(() => {
+            // Check if the user is logged in
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            }
+        })
+        .catch((err) => {
+            console.error('LIFF initialization failed', err);
+        });
+
+        // Function to scan barcode
+        function scanBarcode() {
+            liff.scanCode()
+                .then(result => {
+                    const barcodeData = result.value;
+                    document.getElementById('result').innerHTML = `<p>Scanned Barcode: ${barcodeData}</p>`;
+
+                    // Send the barcode data to LINE chat
+                    sendToLineChat(barcodeData);
+                })
+                .catch(err => {
+                    console.error('Barcode scanning failed', err);
+                });
+        }
+
+        // Function to send data to LINE chat
+        function sendToLineChat(data) {
+            $.ajax({
+                url: 'https://api.line.me/v2/bot/message/push',
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': '1Y6vxTjKR5dVOVonxmO76du1n6iXrh3qYkwOZ1eHz3MZhdq6RLgm/J4IcMbD5wEKVeB1HDIQdOrrVSUVAW7SoUnwvS67Vjwl3Rp1Ng05ACFiDLswmLab73YiM+hismRzkmQoWFIam6btWgnygShJbgdB04t89/1O/w1cDnyilFU='
+                },
+                data: JSON.stringify({
+                    to: liff.getContext().userId,
+                    messages: [
+                        {
+                            type: 'text',
+                            text: `Scanned Barcode: ${data}`
+                        }
+                    ]
+                }),
+                success: function(response) {
+                    console.log('Message sent successfully', response);
+                },
+                error: function(error) {
+                    console.error('Message sending failed', error);
+                }
+            });
+        }
+    </script>
+
+    <!-- Button to trigger barcode scanning -->
+    <button onclick="scanBarcode()">Scan Barcode</button>
+</body>
+</html>
