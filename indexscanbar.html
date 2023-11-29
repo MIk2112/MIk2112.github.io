@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>document</title>
+    </head>
+    <body>
+        <div id="you-qr-result"></div>
+        <h1>scan qr html</h1>
+        <div style="display: flex;justify-content: center;">
+            <div id="my-qr-reader" style="width:500px;">
+
+                </div>
+
+            </div>
+
+            <!-- LOAD LIBRARY-->
+            <script src="https://unpkg.com/html5-qrcode"></script>
+
+            <Script>
+            // CHECK IF DOM IS READY
+            function domReady(fn){
+                if(document.readState === "complete" || document.readState === "interactive"){
+                setTimeout(fn,1)
+    
+                }else{
+                    document.addEventListener("DOMContentLoaded",fn)
+                }
+            }
+            
+            domReady(function(){
+                var myqr = document.getElementById('you-qr-result')
+                var lastresult,counResults = 0;
+
+                // IF FOUND YOU QR CODE
+                function onScanSuccess(decodeText,decodeResult){
+                    if(decodeText !== lastresult){
+                        ++counResults;
+                        lastresult = decodeText
+
+                    // ALERT YOu QR here
+                    alert("You Qr is : " + decodeText,decodeResult)
+                    // AND ADO TUDO YOU QR
+                    myqr.interHTML = 'you scan ${countResults} : ${decodeText}'
+
+
+
+                    }
+                }
+
+                // AND LAST RENDER YOU CAMERA
+                var htmlscanner =new Html5QrcodeScanner
+                    ("my-qr-reader",{fps10,qrbox:250})
+
+                htmlscanner.rander(onScanSuccess)
+    
+            })
+
+        </Script>
+    
+
+
+    </body>
+    <html>
